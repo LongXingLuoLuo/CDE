@@ -52,7 +52,7 @@ module RegGen (
     always @(*) begin
         case (op)
             // immediate
-            `OP_ADDIU, `OP_LUI, `OP_ANDI, `OP_ORI: begin
+            `OP_ADDIU, `OP_LUI, `OP_ANDI, `OP_ORI, `OP_XORI: begin
                 reg_write_en   <= 1;
                 reg_write_addr <= rt;
             end

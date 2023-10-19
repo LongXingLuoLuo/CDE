@@ -8,6 +8,7 @@
 `define OP_LUI        6'b001111
 `define OP_ANDI       6'b001100
 `define OP_ORI        6'b001101
+`define OP_XORI       6'b001110
 
 // j-type
 `define OP_JAL        6'b000011

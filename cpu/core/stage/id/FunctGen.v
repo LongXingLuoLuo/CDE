@@ -19,6 +19,7 @@ module FunctGen (
             `OP_JAL: funct <= `FUNCT_OR;
             `OP_ANDI: funct <= `FUNCT_AND;
             `OP_ORI: funct <= `FUNCT_OR;
+            `OP_XORI: funct <= `FUNCT_XOR;
             default: funct <= `FUNCT_NOP;
         endcase
     end

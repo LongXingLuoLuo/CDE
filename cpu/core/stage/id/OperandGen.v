@@ -27,7 +27,7 @@ module OperandGen (
     always @(*) begin
         case (op)
             // immediate
-            `OP_ADDIU, `OP_LUI, `OP_ORI, `OP_ANDI,
+            `OP_ADDIU, `OP_LUI, `OP_ORI, `OP_ANDI, `OP_XORI,
             // memory accessing
             `OP_LB, `OP_LW, `OP_LBU, `OP_SB, `OP_SW: begin
                 operand_1 <= reg_data_1;
@@ -59,7 +59,8 @@ module OperandGen (
             `OP_SPECIAL: begin
                 operand_2 <= reg_data_2;
             end
-            `OP_ANDI, `OP_ORI: begin
+            // immediate
+            `OP_ANDI, `OP_ORI, `OP_XORI: begin
                 operand_2 <= zero_ext_imm_li;
             end
             default: begin
