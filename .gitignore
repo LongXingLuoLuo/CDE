@@ -1,0 +1,16 @@
+cpu132_gettrace
+soc_axi_func
+soc_sram_func
+
+soft/func/inst/*.o
+soft/func/inst/*.a
+
+soft/func/*.o
+soft/func/*.a
+
+soft/func/bin.lds
+soft/func/convert
+
+soft/func/obj
+
+.vscode
