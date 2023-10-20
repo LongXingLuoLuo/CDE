@@ -20,7 +20,7 @@ module RegGen (
     always @(*) begin
         case (op)
             // arithmetic & logic (immediate)
-            `OP_ADDIU, `OP_ANDI, `OP_ORI,
+            `OP_ADDIU, `OP_ANDI, `OP_ORI, `OP_XORI,
             // memory accessing
             `OP_LB, `OP_LW, `OP_LBU: begin
                 reg_read_en_1 <= 1;
