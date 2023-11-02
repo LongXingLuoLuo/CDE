@@ -19,6 +19,8 @@ module RegGen (
     // generate read address
     always @(*) begin
         case (op)
+            // branch
+            `OP_BGTZ, `OP_BLEZ,
             // arithmetic & logic (immediate)
             `OP_ADDIU, `OP_ANDI, `OP_ORI,
             // memory accessing

@@ -16,6 +16,8 @@
 // branch
 `define OP_BEQ        6'b000100
 `define OP_BNE        6'b000101
+`define OP_BGTZ       6'b000111
+`define OP_BLEZ       6'b000110
 
 // arithmetic
 `define OP_ADDIU      6'b001001

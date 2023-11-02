@@ -94,6 +94,7 @@ module ID (
         .addr       (addr),
         .inst       (inst),
         .op         (inst_op),
+        .rt         (inst_rt),
         .funct      (inst_funct),
         .reg_data_1 (reg_data_1),
         .reg_data_2 (reg_data_2),
