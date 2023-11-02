@@ -7,6 +7,7 @@
 `define FUNCT_SRLV      6'b000110
 `define FUNCT_SRAV      6'b000111
 `define FUNCT_SRL       6'b000010
+`define FUNCT_SRA       6'b000011
 
 // jump
 `define FUNCT_JALR      6'b001001

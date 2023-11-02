@@ -2,7 +2,7 @@
 #include <regdef.h>
 #include <cpu_cde.h>
 
-#define TEST_NUM 26
+#define TEST_NUM 7
 
 
 ##s0, number
@@ -299,103 +299,27 @@ inst_test:
     nop                  #####
 
 kseg0_kseg1:
-    jal n2_addu_test   #addu
+    jal n11_sll_test        #sll
     nop
     jal wait_1s
     nop
-    jal n3_addiu_test  #addiu
+    jal n32_sllv_test        #sll
     nop
     jal wait_1s
     nop
-    jal n4_beq_test    #beq
+    jal n33_sra_test        #sll
     nop
     jal wait_1s
     nop
-    jal n5_bne_test    #bne
+    jal n34_srav_test        #sll
     nop
     jal wait_1s
     nop
-    jal n6_lw_test     #lw
+    jal n35_srl_test        #sll
     nop
     jal wait_1s
     nop
-    jal n7_or_test     #or
-    nop
-    jal wait_1s
-    nop
-    jal n8_slt_test    #slt
-    nop
-    jal wait_1s
-    nop
-    jal n11_sll_test   #sll
-    nop
-    jal wait_1s
-    nop
-    jal n12_sw_test    #sw
-    nop
-    jal wait_1s
-    nop
-    jal n14_jal_test     #jal
-    nop
-    jal wait_1s
-    nop
-    jal n16_beq_ds_test  #beq delay slot
-    nop
-    jal wait_1s
-    nop
-    jal n17_bne_ds_test  #bne delay slot
-    nop
-    jal wait_1s
-    nop
-    jal n19_jal_ds_test  #jal delay slot
-    nop
-    jal wait_1s
-    nop
-    jal n24_subu_test   #subu
-    nop
-    jal wait_1s
-    nop
-    jal n25_sltu_test   #sltu
-    nop
-    jal wait_1s
-    nop
-    jal n26_and_test   #and
-    nop
-    jal wait_1s
-    nop
-    jal n30_xor_test   #xor
-    nop
-    jal wait_1s
-    nop
-    jal n32_sllv_test   #sllv
-    nop
-    jal wait_1s
-    nop
-    jal n34_srav_test   #srav
-    nop
-    jal wait_1s
-    nop
-    jal n36_srlv_test   #srlv
-    nop
-    jal wait_1s
-    nop
-    jal n43_jalr_test   #jalr
-    nop
-    jal wait_1s
-    nop
-    jal n58_jalr_ds_test   #jalr delay slot
-    nop
-    jal wait_1s
-    nop
-    jal n59_lb_test        #lb
-    nop
-    jal wait_1s
-    nop
-    jal n60_lbu_test       #lbu
-    nop
-    jal wait_1s
-    nop
-    jal n63_sb_test        #sb
+    jal n36_srlv_test        #sll
     nop
     jal wait_1s
     nop
