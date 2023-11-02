@@ -1,17 +1,18 @@
 ## 需要通过的指令测试：
 - [ ] n1_lui_test
-- [ ] n2_addu_test
-- [ ] n3_addiu_test
+- [x] n2_addu_test
+- [x] n3_addiu_test
 - [ ] n4_beq_test
 - [ ] n5_bne_test
 - [ ] n6_lw_test
-- [ ] n7_or_test
+- [x] n7_or_test
 - [ ] n8_slt_test
 - [ ] n9_slti_test
 - [ ] n10_sltiu_test
 - [x] n11_sll_test
 - [ ] n12_sw_test
 - [ ] n13_j_test
+- [ ] n14_jal_test
 - [ ] n14_jal_test
 - [ ] n15_jr_test
 - [ ] n16_beq_ds_test
@@ -24,12 +25,12 @@
 - [ ] n23_sub_test
 - [ ] n24_subu_test
 - [ ] n25_sltu_test
-- [ ] n26_and_test
-- [ ] n27_andi_test
-- [ ] n28_nor_test
-- [ ] n29_ori_test
-- [ ] n30_xor_test
-- [ ] n31_xori_test
+- [x] n26_and_test
+- [x] n27_andi_test
+- [x] n28_nor_test
+- [x] n29_ori_test
+- [x] n30_xor_test
+- [x] n31_xori_test
 - [x] n32_sllv_test
 - [x] n33_sra_test
 - [x] n34_srav_test
