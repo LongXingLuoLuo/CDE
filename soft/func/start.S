@@ -2,7 +2,7 @@
 #include <regdef.h>
 #include <cpu_cde.h>
 
-#define TEST_NUM 3
+#define TEST_NUM 5
 
 
 ##s0, number
@@ -299,14 +299,23 @@ inst_test:
     nop                  #####
 
 kseg0_kseg1:
-    jal n38_bgtz_test    # bgtz
+    jal n48_mfhi_test   #mfhi
     nop
     jal wait_1s
     nop
-    jal n53_bgtz_ds_test  # bgtz_ds
+    jal n49_mflo_test   #mflo
     nop
     jal wait_1s
     nop
+    jal n50_mthi_test   #mthi
+    nop
+    jal wait_1s
+    nop
+    jal n51_mtlo_test   #mtlo
+    nop
+    jal wait_1s
+    nop
+
     # jal		n1_lui_test     # lui 
     # nop
     # jal		wait_1s

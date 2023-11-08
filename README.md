@@ -47,10 +47,10 @@
 - [ ] n45_divu_test
 - [ ] n46_mult_test
 - [ ] n47_multu_test
-- [ ] n48_mfhi_test
-- [ ] n49_mflo_test
-- [ ] n50_mthi_test
-- [ ] n51_mtlo_test
+- [x] n48_mfhi_test
+- [x] n49_mflo_test
+- [x] n50_mthi_test
+- [x] n51_mtlo_test
 - [ ] n52_bgez_ds_test
 - [ ] n53_bgtz_ds_test
 - [ ] n54_blez_ds_test
