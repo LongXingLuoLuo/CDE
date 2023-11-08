@@ -364,6 +364,10 @@ module Core (
         .read_data_2(id_reg_data_2)
     );
 
+    HILO_RegReadProxy u_hilo_regreadproxy(
+        .
+    )
+
 
     // pipeline control
     PipelineController pipeline_controller (

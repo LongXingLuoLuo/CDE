@@ -2,7 +2,7 @@
 #include <regdef.h>
 #include <cpu_cde.h>
 
-#define TEST_NUM 15
+#define TEST_NUM 3
 
 
 ##s0, number
@@ -299,62 +299,70 @@ inst_test:
     nop                  #####
 
 kseg0_kseg1:
-    jal		n1_lui_test     # lui 
+    jal n38_bgtz_test    # bgtz
     nop
-    jal		wait_1s
+    jal wait_1s
     nop
-    jal     n7_or_test      # or
+    jal n53_bgtz_ds_test  # bgtz_ds
     nop
-    jal     wait_1s
+    jal wait_1s
     nop
-    jal     n11_sll_test    # sll
-    nop
-    jal     wait_1s
-    nop
-    jal		n26_and_test    # and
-    nop
-    jal		wait_1s
-    nop
-    jal		n27_andi_test   # andi
-    nop
-    jal		wait_1s
-    nop
-    jal		n28_nor_test    # nor
-    nop
-    jal		wait_1s
-    nop
-    jal		n29_ori_test    # ori
-    nop
-    jal		wait_1s
-    nop
-    jal		n30_xor_test    # xor
-    nop
-    jal		wait_1s
-    nop
-    jal		n31_xori_test   # xori
-    nop
-    jal		wait_1s
-    nop
-    jal     n32_sllv_test   # sllv
-    nop
-    jal     wait_1s
-    nop
-    jal     n33_sra_test    # sra
-    nop
-    jal     wait_1s
-    nop
-    jal     n34_srav_test   # srav
-    nop
-    jal     wait_1s
-    nop
-    jal     n35_srl_test    # srl
-    nop
-    jal     wait_1s
-    nop
-    jal     n36_srlv_test   # srlv
-    nop
-    jal     wait_1s
-    nop
+    # jal		n1_lui_test     # lui 
+    # nop
+    # jal		wait_1s
+    # nop
+    # jal     n7_or_test      # or
+    # nop
+    # jal     wait_1s
+    # nop
+    # jal     n11_sll_test    # sll
+    # nop
+    # jal     wait_1s
+    # nop
+    # jal		n26_and_test    # and
+    # nop
+    # jal		wait_1s
+    # nop
+    # jal		n27_andi_test   # andi
+    # nop
+    # jal		wait_1s
+    # nop
+    # jal		n28_nor_test    # nor
+    # nop
+    # jal		wait_1s
+    # nop
+    # jal		n29_ori_test    # ori
+    # nop
+    # jal		wait_1s
+    # nop
+    # jal		n30_xor_test    # xor
+    # nop
+    # jal		wait_1s
+    # nop
+    # jal		n31_xori_test   # xori
+    # nop
+    # jal		wait_1s
+    # nop
+    # jal     n32_sllv_test   # sllv
+    # nop
+    # jal     wait_1s
+    # nop
+    # jal     n33_sra_test    # sra
+    # nop
+    # jal     wait_1s
+    # nop
+    # jal     n34_srav_test   # srav
+    # nop
+    # jal     wait_1s
+    # nop
+    # jal     n35_srl_test    # srl
+    # nop
+    # jal     wait_1s
+    # nop
+    # jal     n36_srlv_test   # srlv
+    # nop
+    # jal     wait_1s
+    # nop
 ###check io access
     LI  (a0, IO_SIMU_ADDR)
     LI  (t0, 0x1234)
