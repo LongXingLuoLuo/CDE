@@ -32,4 +32,10 @@
 // but we can't make sure it won't be used in a future version
 `define FUNCT_NOP       6'b111111
 
+// HILO
+`define FUNCT_MFHI      6'b010000
+`define FUNCT_MFLO      6'b010010
+`define FUNCT_MTHI      6'b010001
+`define FUNCT_MTLO      6'b010011
+
 `endif  // TINYMIPS_FUNCT_V_
