@@ -151,6 +151,26 @@ module Core (
         .current_pc_addr_out  (idex_current_pc_addr)
     );
 
+    // * from HILO
+    wire [`DATA_BUS] idex_hi, idex_lo;
+
+    // * mult div
+    wire [`DOUBLE_DATA_BUS] mult_div_result;
+    wire mult_div_done;
+
+    MultDiv u_MultDiv (
+        .clk                 (clk),
+        .rst                 (rst),
+        .stall_all           (stall),
+        .funct               (idex_funct),
+        .operand_1           (idex_operand_1),
+        .operand_2           (idex_operand_2),
+        .hi                  (idex_hi),
+        .lo                  (idex_lo),
+        .done                (mult_div_done),
+        .result              (mult_div_result)
+    );
+
 
     // EX stage
     wire ex_ex_load_flag;
@@ -163,10 +183,11 @@ module Core (
     wire [`REG_ADDR_BUS] ex_reg_write_addr, exmem_reg_write_addr;
     wire [`ADDR_BUS] ex_current_pc_addr, exmem_current_pc_addr;
 
-    // * from HILO
-    wire [`DATA_BUS] idex_hi, idex_lo;
     wire [`DATA_BUS] ex_hi, ex_lo, exmem_hi, exmem_lo;
     wire ex_hilo_write_en, exmem_hilo_write_en;
+
+    // * stall_request
+    wire ex_stall_request;
 
     EX ex_stage (
         .funct               (idex_funct),
@@ -186,6 +207,11 @@ module Core (
         .hi_in               (idex_hi),
         .lo_in               (idex_lo),
 
+        // * mult div
+        .mult_div_done       (mult_div_done),
+        .mult_div_result     (mult_div_result),
+
+
         .ex_load_flag(ex_ex_load_flag),
 
         .mem_read_flag_out    (ex_mem_read_flag),
@@ -197,6 +223,9 @@ module Core (
         .hilo_write_en        (ex_hilo_write_en),
         .hi_out               (ex_hi),
         .lo_out               (ex_lo),
+
+        // * stall_request
+        .stall_request(ex_stall_request),
 
         .result             (ex_result),
         .reg_write_en_out   (ex_reg_write_en),
@@ -450,6 +479,7 @@ module Core (
     // pipeline control
     PipelineController pipeline_controller (
         .request_from_id(id_stall_request),
+        .request_from_ex(ex_stall_request),
         .stall_all      (stall),
         .stall_pc       (stall_pc_conn),
         .stall_if       (stall_if_conn),

@@ -5,6 +5,7 @@
 module PipelineController(
   // stall request signals
   input   request_from_id,
+  input   request_from_ex,
   // stall whole pipeline
   input   stall_all,
   // stall signals for each mid-stage
@@ -28,6 +29,9 @@ module PipelineController(
     end
     else if (request_from_id) begin
       stall <= 6'b000111;
+    end
+    else if(request_from_ex) begin
+      stall <= 6'b001111;
     end
     else begin
       stall <= 6'b000000;

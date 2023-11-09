@@ -38,4 +38,10 @@
 `define FUNCT_MTHI      6'b010001
 `define FUNCT_MTLO      6'b010011
 
+// multdiv
+`define FUNCT_DIV       6'b011010
+`define FUNCT_DIVU      6'b011011
+`define FUNCT_MULT      6'b011000
+`define FUNCT_MULTU     6'b011001
+
 `endif  // TINYMIPS_FUNCT_V_

@@ -18,8 +18,13 @@ module EX (
     input      [`REG_ADDR_BUS] reg_write_addr_in,
     input      [    `ADDR_BUS] current_pc_addr_in,
 
+    // * hilo
     input      [    `DATA_BUS] hi_in,
     input      [    `DATA_BUS] lo_in,
+
+    // * MULTDIV
+    input                           mult_div_done,
+    input       [`DOUBLE_DATA_BUS]  mult_div_result,
 
     // to ID stage (solve data hazards)
     output                     ex_load_flag,
@@ -34,6 +39,9 @@ module EX (
     output                     reg_write_en_out,
     output     [`REG_ADDR_BUS] reg_write_addr_out,
     output     [    `ADDR_BUS] current_pc_addr_out,
+
+    // * stall signle
+    output  reg                stall_request,
 
     // * HILO control
     output  reg                 hilo_write_en,
@@ -99,8 +107,27 @@ module EX (
         endcase
     end
 
+    // * stall_request
     always @(*) begin
         case (funct)
+            `FUNCT_MULT, `FUNCT_MULTU, 
+            `FUNCT_DIV, `FUNCT_DIVU: begin
+                stall_request <= !mult_div_done;
+            end
+            default: stall_request <= 0;
+        endcase
+    end
+
+    // * hilo_write_en hi_out lo_out
+    always @(*) begin
+        case (funct)
+            // multplication & division
+            `FUNCT_MULT, `FUNCT_MULTU, 
+            `FUNCT_DIV, `FUNCT_DIVU: begin
+                hilo_write_en <= 1;
+                hi_out <= mult_div_result[63:32];
+                lo_out <= mult_div_result[31: 0];
+            end
             // HILO move inst
             `FUNCT_MTHI: begin
                 hilo_write_en <= 1;
