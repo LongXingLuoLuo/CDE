@@ -299,23 +299,6 @@ inst_test:
     nop                  #####
 
 kseg0_kseg1:
-    jal n48_mfhi_test   #mfhi
-    nop
-    jal wait_1s
-    nop
-    jal n49_mflo_test   #mflo
-    nop
-    jal wait_1s
-    nop
-    jal n50_mthi_test   #mthi
-    nop
-    jal wait_1s
-    nop
-    jal n51_mtlo_test   #mtlo
-    nop
-    jal wait_1s
-    nop
-
     # jal		n1_lui_test     # lui 
     # nop
     # jal		wait_1s
@@ -372,6 +355,41 @@ kseg0_kseg1:
     # nop
     # jal     wait_1s
     # nop
+    
+    # jal n48_mfhi_test   # mfhi
+    # nop
+    # jal wait_1s
+    # nop
+    # jal n49_mflo_test   # mflo
+    # nop
+    # jal wait_1s
+    # nop
+    # jal n50_mthi_test   # mthi
+    # nop
+    # jal wait_1s
+    # nop
+    # jal n51_mtlo_test   # mtlo
+    # nop
+    # jal wait_1s
+    # nop
+
+    jal     n44_div_test       # div
+    nop
+    jal     wait_1s
+    nop
+    jal     n45_divu_test       # divu
+    nop
+    jal     wait_1s
+    nop
+    jal     n46_mult_test      # mult
+    nop
+    jal     wait_1s
+    nop
+    jal     n47_multu_test       # multu
+    nop
+    jal     wait_1s
+    nop
+
 ###check io access
     LI  (a0, IO_SIMU_ADDR)
     LI  (t0, 0x1234)
