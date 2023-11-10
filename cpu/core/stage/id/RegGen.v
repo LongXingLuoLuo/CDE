@@ -2,6 +2,7 @@
 
 `include "bus.v"
 `include "opcode.v"
+`include "cp0exc.v"
 
 module RegGen (
     input      [ `INST_OP_BUS] op,
@@ -39,6 +40,13 @@ module RegGen (
                 reg_addr_1 <= rs;
                 reg_addr_2 <= rt;
             end
+            //* cp0
+            `OP_CP0: begin
+                reg_read_en_1 <= 1;
+                reg_read_en_2 <= 0;
+                reg_addr_1 <= rt;
+                reg_addr_2 <= 0;
+            end
             default: begin  // OP_JAL, OP_LUI
                 reg_read_en_1 <= 0;
                 reg_read_en_2 <= 0;
@@ -67,6 +75,17 @@ module RegGen (
             `OP_LB, `OP_LBU, `OP_LW: begin
                 reg_write_en   <= 1;
                 reg_write_addr <= rt;
+            end
+            //* cp0
+            `OP_CP0: begin
+                if (rs == `CP0_MFC0) begin
+                    reg_write_en <= 1;
+                    reg_write_addr <= rt;
+                end
+                else begin
+                    reg_write_en <= 0;
+                    reg_write_addr <= 0;
+                end
             end
             default: begin
                 reg_write_en   <= 0;

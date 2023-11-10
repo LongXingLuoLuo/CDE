@@ -22,6 +22,10 @@ module MEMWB(
   input                   hilo_write_en_in,
   input       [`DATA_BUS] hi_in,
   input       [`DATA_BUS] lo_in,
+  //* cp0
+  input                   cp0_write_en_in,
+  input   [`DATA_BUS]     cp0_write_data_in,
+  input   [`CP0_ADDR_BUS] cp0_addr_in,
   // RAM data
   output  [`DATA_BUS]     ram_read_data_out,
   // memory accessing signals
@@ -37,6 +41,11 @@ module MEMWB(
   output                  hilo_write_en_out,
   output  [`DATA_BUS]     hi_out,
   output  [`DATA_BUS]     lo_out,
+
+  //* to cp0
+  output                  cp0_write_en_out,
+  output  [`DATA_BUS]     cp0_write_data_out,
+  output  [`CP0_ADDR_BUS] cp0_addr_out,
   // debug signals
   output  [`ADDR_BUS]     current_pc_addr_out
 );
@@ -114,4 +123,22 @@ module MEMWB(
     lo_in, lo_out
   );
 
+  //* cp0
+  PipelineDeliver #(1) ff_cp0_write_en(
+    clk, rst,
+    stall_current_stage, stall_next_stage,
+    cp0_write_en_in, cp0_write_en_out
+  );
+
+  PipelineDeliver #(`CP0_ADDR_BUS_WIDTH) ff_cp0_addr(
+    clk, rst,
+    stall_current_stage, stall_next_stage,
+    cp0_addr_in, cp0_addr_out
+  );
+
+  PipelineDeliver #(`DATA_BUS_WIDTH) ff_cp0_write_data(
+    clk, rst,
+    stall_current_stage, stall_next_stage,
+    cp0_write_data_in, cp0_write_data_out
+  );
 endmodule // MEMWB

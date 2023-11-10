@@ -21,6 +21,16 @@ module EXMEM (
     input                  hilo_write_en_in,
     input   [`DATA_BUS]    hi_in,
     input   [`DATA_BUS]    lo_in,
+    //* cp0
+    input                   cp0_write_en_in,
+    input   [`DATA_BUS]     cp0_write_data_in,
+    input   [`CP0_ADDR_BUS] cp0_addr_in,
+    // // exception
+    // input      [`EXC_TYPE_BUS] exception_type_in,
+    // input                   eret_flag_in,
+    // input                   syscall_flag_in,
+    // input                   break_flag_in,
+    // input                   delayslot_flag_in,
     // output to MEM stage
     output                 mem_read_flag_out,
     output                 mem_write_flag_out,
@@ -35,7 +45,17 @@ module EXMEM (
     // * HI & LO control
     output                 hilo_write_en_out,
     output  [`DATA_BUS]    hi_out,
-    output  [`DATA_BUS]    lo_out
+    output  [`DATA_BUS]    lo_out,
+    //* cp0
+    output                  cp0_write_en_out,
+    output  [`DATA_BUS]     cp0_write_data_out,
+    output  [`CP0_ADDR_BUS] cp0_addr_out
+    // // exception
+    // output      [`EXC_TYPE_BUS] exception_type_out,
+    // output                  eret_flag_out,
+    // output                  syscall_flag_out,
+    // output                  break_flag_out,
+    // output                  delayslot_flag_out
 );
 
     PipelineDeliver #(1) ff_mem_read_flag (
@@ -136,6 +156,25 @@ module EXMEM (
         clk, rst,
         stall_current_stage, stall_next_stage,
         lo_in, lo_out
+    );
+
+    //* cp0
+    PipelineDeliver #(1) ff_cp0_write_en(
+        clk, rst,
+        stall_current_stage, stall_next_stage,
+        cp0_write_en_in, cp0_write_en_out
+    );
+
+    PipelineDeliver #(`CP0_ADDR_BUS_WIDTH) ff_cp0_addr(
+        clk, rst,
+        stall_current_stage, stall_next_stage,
+        cp0_addr_in, cp0_addr_out
+    );
+
+    PipelineDeliver #(`DATA_BUS_WIDTH) ff_cp0_write_data(
+        clk, rst,
+        stall_current_stage, stall_next_stage,
+        cp0_write_data_in, cp0_write_data_out
     );
 
 endmodule  // EXMEM

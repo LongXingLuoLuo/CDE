@@ -18,6 +18,19 @@ module MEM(
   input                       hilo_write_en_in,
   input       [`DATA_BUS]     hi_in,
   input       [`DATA_BUS]     lo_in,
+
+  //* cp0 control
+  input                       cp0_write_en_in,
+  input       [`DATA_BUS]     cp0_write_data_in,
+  input       [`CP0_ADDR_BUS] cp0_addr_in,
+  // input       [`EXC_TYPE_BUS] exception_type_in,
+  // input       [`DATA_BUS]     cp0_status_in,
+  // input       [`DATA_BUS]     cp0_cause_in,
+  // input       [`DATA_BUS]     cp0_epc_in,
+  // input                       eret_flag_in,
+  // input                       syscall_flag_in,
+  // input                       break_flag_in,
+
   // RAM control signals
   output                      ram_en,
   output      [`MEM_SEL_BUS]  ram_write_en,
@@ -37,13 +50,30 @@ module MEM(
   // * HILO control
   output                      hilo_write_en_out,
   output      [`DATA_BUS]     hi_out,
-  output      [`DATA_BUS]     lo_out
+  output      [`DATA_BUS]     lo_out,
+
+  //* cp0 control
+  output                      cp0_write_en_out,
+  output      [`DATA_BUS]     cp0_write_data_out,
+  output      [`CP0_ADDR_BUS] cp0_addr_out
+  // output  reg [`EXC_TYPE_BUS] exception_type_out,
+  // output      [`ADDR_BUS]     cp0_epc_out,
+  // output  reg [`DATA_BUS]     cp0_badvaddr_write_data_out
+  // output                      eret_flag_out,
+  // output                      syscall_flag_out,
+  // output                      break_flag_out,
+
 );
 
   // * HILO control
   assign hilo_write_en_out = hilo_write_en_in;
   assign hi_out = hi_in;
   assign lo_out = lo_in;
+
+  // cp0 control
+  assign cp0_write_en_out = cp0_write_en_in;
+  assign cp0_write_data_out = cp0_write_data_in;
+  assign cp0_addr_out = cp0_addr_in;
 
   // internal ram_write_sel control signal
   reg[`MEM_SEL_BUS] ram_write_sel;

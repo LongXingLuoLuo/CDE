@@ -26,6 +26,19 @@ module EX (
     input                           mult_div_done,
     input       [`DOUBLE_DATA_BUS]  mult_div_result,
 
+    //* cp0 signal
+    input                           cp0_write_en_in,
+    input                           cp0_read_en_in,
+    input       [`CP0_ADDR_BUS]     cp0_addr_in,
+    input       [`DATA_BUS]         cp0_write_data_in,
+    input       [`DATA_BUS]         cp0_read_data_in,
+    // // exception signal
+    // input      [`EXC_TYPE_BUS] exception_type_in,
+    // input                           eret_flag_in,
+    // input                           syscall_flag_in,
+    // input                           break_flag_in,
+    // input                           delayslot_flag_in,
+
     // to ID stage (solve data hazards)
     output                     ex_load_flag,
     // to MEM stage
@@ -46,7 +59,18 @@ module EX (
     // * HILO control
     output  reg                 hilo_write_en,
     output  reg [`DATA_BUS]     hi_out,
-    output  reg [`DATA_BUS]     lo_out
+    output  reg [`DATA_BUS]     lo_out,
+
+    //* cp0 signal
+    output                          cp0_write_en_out,
+    output      [`DATA_BUS]         cp0_write_data_out,
+    output      [`CP0_ADDR_BUS]     cp0_addr_out
+    // // exception signal
+    // output      [`EXC_TYPE_BUS] exception_type_out,
+    // output                          eret_flag_out,
+    // output                          syscall_flag_out,
+    // output                          break_flag_out,
+    // output                          delayslot_flag_out
 );
 
     // to ID stage
@@ -61,6 +85,11 @@ module EX (
     assign reg_write_en_out = reg_write_en_in && !mem_write_flag_in;
     assign reg_write_addr_out = reg_write_addr_in;
     assign current_pc_addr_out = current_pc_addr_in;
+
+    //* to cp0
+    assign cp0_write_en_out = cp0_write_en_in;
+    assign cp0_addr_out = cp0_addr_in;
+    assign cp0_write_data_out = cp0_write_data_in;
 
     // calculate the complement of operand_2
     wire[`DATA_BUS] operand_2_mux =
@@ -103,7 +132,7 @@ module EX (
             // HILO
             `FUNCT_MFHI: result <= hi_in;
             `FUNCT_MFLO: result <= lo_in;
-            default: result <= 0;
+            default: result <= cp0_read_en_in ? cp0_read_data_in : 0;       //* cp0
         endcase
     end
 

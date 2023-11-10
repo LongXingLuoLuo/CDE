@@ -82,12 +82,31 @@ module Core (
     wire [`REG_ADDR_BUS] id_reg_write_addr, idex_reg_write_addr;
     wire [`ADDR_BUS] id_current_pc_addr, idex_current_pc_addr;
 
+
+    wire id_cp0_write_en, id_cp0_read_en;
+    wire [`DATA_BUS] id_cp0_write_data;
+    wire [`CP0_ADDR_BUS] id_cp0_addr;
+    // wire  id_delayslot_flag_in, id_delayslot_flag_out, id_next_inst_delayslot_flag, id_eret_flag, id_syscall_flag, id_break_flag;
+    // wire [`EXC_TYPE_BUS] id_exception_type;
+
+
+    wire  idex_cp0_write_en, idex_cp0_read_en;
+    wire [`DATA_BUS] idex_cp0_write_data, idex_cp0_read_data;
+    wire [`CP0_ADDR_BUS] idex_cp0_addr;
+    // wire idex_eret_flag, idex_syscall_flag, idex_break_flag, idex_delayslot_flag;
+
+    wire [`DATA_BUS] cp0_rp_data;
+    // wire [`DATA_BUS] cp0_rp_status, cp0_rp_cause, cp0_rp_epc;
+    // wire [`EXC_TYPE_BUS] idex_exception_type;
+
     ID id_stage (
         .addr(ifid_addr),
         .inst(ifid_inst),
 
         .load_related_1(id_load_related_1),
         .load_related_2(id_load_related_2),
+
+        // .delayslot_flag_in        (id_delayslot_flag_in),
 
         .reg_read_en_1(id_reg_read_en_1),
         .reg_addr_1   (id_reg_addr_1),
@@ -115,6 +134,19 @@ module Core (
         .reg_write_en  (id_reg_write_en),
         .reg_write_addr(id_reg_write_addr),
 
+        //* cp0
+        .cp0_write_en             (id_cp0_write_en),
+        .cp0_read_en              (id_cp0_read_en),
+        .cp0_addr                 (id_cp0_addr),
+        .cp0_write_data           (id_cp0_write_data),
+
+        // .delayslot_flag_out       (id_delayslot_flag_out),
+        // .next_inst_delayslot_flag (id_next_inst_delayslot_flag),
+        // .exception_type           ( id_exception_type   ),
+        // .eret_flag                (id_eret_flag),
+        // .syscall_flag             (id_syscall_flag),
+        // .break_flag               (id_break_flag), 
+
         .current_pc_addr(id_current_pc_addr)
     );
 
@@ -135,6 +167,20 @@ module Core (
         .mem_write_data_in   (id_mem_write_data),
         .reg_write_en_in     (id_reg_write_en),
         .reg_write_addr_in   (id_reg_write_addr),
+
+        //* cp0
+        .cp0_write_en_in      (id_cp0_write_en),
+        .cp0_read_en_in       (id_cp0_read_en),
+        .cp0_addr_in          (id_cp0_addr),
+        .cp0_write_data_in    (id_cp0_write_data),
+        .cp0_read_data_in     (cp0_rp_data),
+        // .exception_type_in            (id_exception_type),
+        // .eret_flag_in                 (id_eret_flag),
+        // .syscall_flag_in              (id_syscall_flag),
+        // .break_flag_in                (id_break_flag),
+        // .delayslot_flag_in            (id_delayslot_flag_out),
+        // .next_inst_delayslot_flag_in  (id_next_inst_delayslot_flag),
+
         .current_pc_addr_in  (id_current_pc_addr),
 
         .funct_out            (idex_funct),
@@ -148,6 +194,21 @@ module Core (
         .mem_write_data_out   (idex_mem_write_data),
         .reg_write_en_out     (idex_reg_write_en),
         .reg_write_addr_out   (idex_reg_write_addr),
+
+        //* cp0
+        .cp0_write_en_out     (idex_cp0_write_en),
+        .cp0_read_en_out      (idex_cp0_read_en),
+        .cp0_addr_out         (idex_cp0_addr),
+        .cp0_write_data_out   (idex_cp0_write_data),
+        .cp0_read_data_out    (idex_cp0_read_data),
+
+        // .exception_type_out           (idex_exception_type),
+        // .eret_flag_out                (idex_eret_flag),
+        // .syscall_flag_out             (idex_syscall_flag),
+        // .break_flag_out               (idex_break_flag),
+        // .delayslot_flag_out           (idex_delayslot_flag),
+        // .next_inst_delayslot_flag_out (id_delayslot_flag_in),
+
         .current_pc_addr_out  (idex_current_pc_addr)
     );
 
@@ -189,6 +250,19 @@ module Core (
     // * stall_request
     wire ex_stall_request;
 
+    //* cp0
+    wire ex_cp0_write_en;
+    wire [`ADDR_BUS] ex_cp0_write_data;
+    wire [`CP0_ADDR_BUS] ex_cp0_addr;
+    // wire ex_eret_flag, ex_syscall_flag, ex_break_flag, ex_delayslot_flag;
+    // wire [`EXC_TYPE_BUS] ex_exception_type;
+
+    wire exmem_cp0_write_en;
+    wire [`ADDR_BUS] exmem_cp0_write_data;
+    wire [`CP0_ADDR_BUS] exmem_cp0_addr;
+    // wire exmem_eret_flag, exmem_syscall_flag, exmem_break_flag, exmem_delayslot_flag;
+    // wire [`EXC_TYPE_BUS] exmem_exception_type;
+
     EX ex_stage (
         .funct               (idex_funct),
         .shamt               (idex_shamt),
@@ -211,6 +285,18 @@ module Core (
         .mult_div_done       (mult_div_done),
         .mult_div_result     (mult_div_result),
 
+        //* cp0
+        .cp0_write_en_in      (idex_cp0_write_en),
+        .cp0_read_en_in       (idex_cp0_read_en),
+        .cp0_addr_in          (idex_cp0_addr),
+        .cp0_write_data_in    (idex_cp0_write_data),
+        .cp0_read_data_in     (idex_cp0_read_data),
+        // .exception_type_in    (idex_exception_type),
+        // .eret_flag_in         (idex_eret_flag),
+        // .syscall_flag_in      (idex_syscall_flag),
+        // .break_flag_in        (idex_break_flag),
+        // .delayslot_flag_in    (idex_delayslot_flag),
+
 
         .ex_load_flag(ex_ex_load_flag),
 
@@ -226,6 +312,16 @@ module Core (
 
         // * stall_request
         .stall_request(ex_stall_request),
+
+        //* cp0
+        .cp0_write_en_out     (ex_cp0_write_en),
+        .cp0_write_data_out   (ex_cp0_write_data),
+        .cp0_addr_out         (ex_cp0_addr),
+        // .exception_type_out   (ex_exception_type),
+        // .eret_flag_out        (ex_eret_flag),
+        // .syscall_flag_out     (ex_syscall_flag),
+        // .break_flag_out       (ex_break_flag),
+        // .delayslot_flag_out   (ex_delayslot_flag),
 
         .result             (ex_result),
         .reg_write_en_out   (ex_reg_write_en),
@@ -254,6 +350,16 @@ module Core (
         .hi_in                (ex_hi),
         .lo_in                (ex_lo),
 
+        //* cp0
+        .cp0_write_en_in        (ex_cp0_write_en),
+        .cp0_write_data_in      (ex_cp0_write_data),
+        .cp0_addr_in            (ex_cp0_addr),
+        // .exception_type_in      (ex_exception_type),
+        // .eret_flag_in           (ex_eret_flag),
+        // .syscall_flag_in        (ex_syscall_flag),
+        // .break_flag_in          (ex_break_flag),
+        // .delayslot_flag_in      (ex_delayslot_flag),
+
         .mem_read_flag_out    (exmem_mem_read_flag),
         .mem_write_flag_out   (exmem_mem_write_flag),
         .mem_sign_ext_flag_out(exmem_mem_sign_ext_flag),
@@ -264,6 +370,16 @@ module Core (
         .hilo_write_en_out      (exmem_hilo_write_en),
         .hi_out                 (exmem_hi),
         .lo_out                 (exmem_lo),
+
+        //* cp0
+        .cp0_write_en_out     (exmem_cp0_write_en),
+        .cp0_write_data_out   (exmem_cp0_write_data),
+        .cp0_addr_out         (exmem_cp0_addr),
+        // .exception_type_out   (exmem_exception_type),
+        // .eret_flag_out        (exmem_eret_flag),
+        // .syscall_flag_out     (exmem_syscall_flag),
+        // .break_flag_out       (exmem_break_flag),
+        // .delayslot_flag_out   (exmem_delayslot_flag),
 
         .result_out           (exmem_result),
         .reg_write_en_out     (exmem_reg_write_en),
@@ -286,6 +402,23 @@ module Core (
     wire [`DATA_BUS] mem_hi, mem_lo, memwb_hi, memwb_lo;
     wire mem_hilo_write_en, memwb_hilo_write_en;
 
+    // cp0 exception
+
+    wire mem_cp0_write_en;
+    wire [`DATA_BUS] mem_cp0_write_data;
+    wire [`CP0_ADDR_BUS] mem_cp0_addr;
+    // wire [`EXC_TYPE_BUS] cp0_exception_type;
+    // wire cp0_delayslot_flag;
+    // wire [`ADDR_BUS] cp0_badvaddr_write_data;
+    // // to pipelineControl
+    // wire [`ADDR_BUS] ctrl_cp0_epc;
+    // wire [`DATA_BUS] exmem_cp0_status, exmem_cp0_cause, exmem_cp0_epc;
+    // wire mem_eret_flag, mem_syscall_flag, mem_break_flag;
+
+    wire memwb_cp0_write_en;
+    wire [`DATA_BUS] memwb_cp0_write_data;
+    wire [`CP0_ADDR_BUS] memwb_cp0_addr;
+
     MEM mem_stage (
         .mem_read_flag_in    (exmem_mem_read_flag),
         .mem_write_flag_in   (exmem_mem_write_flag),
@@ -301,6 +434,18 @@ module Core (
         .hilo_write_en_in  (exmem_hilo_write_en),
         .hi_in             (exmem_hi),
         .lo_in             (exmem_lo),
+
+        //* cp0
+        .cp0_write_en_in   (exmem_cp0_write_en),
+        .cp0_write_data_in (exmem_cp0_write_data),
+        .cp0_addr_in       (exmem_cp0_addr),
+        // .cp0_status_in     (exmem_cp0_status),
+        // .cp0_cause_in      (exmem_cp0_cause),
+        // .cp0_epc_in        (exmem_cp0_epc),
+        // .eret_flag_in      (exmem_eret_flag),
+        // .syscall_flag_in   (exmem_syscall_flag),
+        // .break_flag_in     (exmem_break_flag),
+        // .exception_type_in (exmem_exception_type),
 
         .ram_en        (ram_en),
         .ram_write_en  (ram_write_en),
@@ -321,7 +466,19 @@ module Core (
         // * hilo
         .hilo_write_en_out      (mem_hilo_write_en),
         .hi_out                 (mem_hi),
-        .lo_out                 (mem_lo)
+        .lo_out                 (mem_lo),
+
+        //* cp0
+        .cp0_write_en_out       (mem_cp0_write_en),
+        .cp0_write_data_out     (mem_cp0_write_data),
+        .cp0_addr_out           (mem_cp0_addr)
+        // .eret_flag_out          (mem_eret_flag),
+        // .syscall_flag_out       (mem_syscall_flag),
+        // .break_flag_out         (mem_break_flag),
+        // .exception_type_out     (cp0_exception_type),
+        // .delayslot_flag_out     (cp0_delayslot_flag),
+        // .cp0_epc_out            (cp0_rp_epc),
+        // .cp0_badvaddr_write_data_out      (cp0_badvaddr_write_data)
     );
 
     MEMWB memwb (
@@ -346,6 +503,11 @@ module Core (
         .hi_in               (mem_hi),
         .lo_in               (mem_lo),
 
+        //* cp0
+        .cp0_write_en_in     (mem_cp0_write_en),
+        .cp0_write_data_in   (mem_cp0_write_data),
+        .cp0_addr_in         (mem_cp0_addr),
+
         .ram_read_data_out(memwb_ram_read_data),
 
         .mem_read_flag_out    (memwb_mem_read_flag),
@@ -360,7 +522,12 @@ module Core (
         // * hilo
         .hilo_write_en_out    (memwb_hilo_write_en),
         .hi_out               (memwb_hi),
-        .lo_out               (memwb_lo)
+        .lo_out               (memwb_lo),
+
+        //* cp0
+        .cp0_write_en_out     (memwb_cp0_write_en),
+        .cp0_write_data_out   (memwb_cp0_write_data),
+        .cp0_addr_out         (memwb_cp0_addr)
     );
 
 
@@ -371,6 +538,10 @@ module Core (
 
     assign debug_reg_write_addr = wb_reg_write_addr;
     assign debug_reg_write_data = wb_result;
+
+    wire cp0_write_en;
+    wire [`DATA_BUS] cp0_write_data;
+    wire [`CP0_ADDR_BUS] cp0_addr;
 
     WB wb_stage (
         .ram_read_data(memwb_ram_read_data),
@@ -389,6 +560,11 @@ module Core (
         .hi_in              ( memwb_hi),
         .lo_in              ( memwb_lo),
 
+        //* cp0 in
+        .cp0_write_en_in   (memwb_cp0_write_en),
+        .cp0_write_data_in (memwb_cp0_write_data),
+        .cp0_addr_in       (memwb_cp0_addr), 
+
         .result_out        (wb_result),
         .reg_write_en_out  (wb_reg_write_en),
         .reg_write_addr_out(wb_reg_write_addr),
@@ -397,6 +573,11 @@ module Core (
         .hilo_write_en_out (wb_hilo_write_en),
         .hi_out(wb_hilo_hi),
         .lo_out(wb_hilo_lo),
+
+        //* cp0 out
+        .cp0_write_en_out  (cp0_write_en),
+        .cp0_write_data_out(cp0_write_data),
+        .cp0_addr_out      (cp0_addr),
 
         .debug_reg_write_en(debug_reg_write_en),
         .debug_pc_addr_out (debug_pc_addr)
@@ -474,6 +655,60 @@ module Core (
         .hi_o(idex_hi),
         .lo_o(idex_lo)
     );
+
+    wire [`DATA_BUS] cp0_data;
+    // wire [`DATA_BUS] cp0_status, cp0_cause, cp0_epc, cp0_count, cp0_config;
+	// wire [`ADDR_BUS] cp0_current_pc_addr = mem_current_pc_addr;
+    // wire [`DATA_BUS] cp0_config0;
+
+    CP0  cp0 (
+        .clk                (clk),
+        .rst                (rst),
+        .cp0_write_en       (cp0_write_en),
+        .cp0_read_addr      (ex_cp0_addr),
+        .cp0_write_addr     (cp0_addr),
+        .cp0_write_data     (cp0_write_data),
+        // .cp0_badvaddr_write_data  (cp0_badvaddr_write_data),
+        // .interrupt_i        (interrupt),
+        // .exception_type     (cp0_exception_type),
+        // .eret_flag          (mem_eret_flag),
+        // .syscall_flag       (mem_syscall_flag),
+        // .break_flag         (mem_break_flag),
+        // .delayslot_flag     (cp0_delayslot_flag),
+        // .current_pc_addr    (cp0_current_pc_addr),
+
+        .data_o             (cp0_data)
+        // .status_o           (cp0_status),
+        // .cause_o            (cp0_cause),
+        // .epc_o              (cp0_epc),
+        // .count_o            (cp0_count),
+        // .config0_o          (cp0_config)
+    );
+
+    CP0ReadProxy  cp0ReadProxy(
+        .cp0_read_addr      (id_cp0_addr),
+        .cp0_read_data_i    (cp0_data),
+        // .cp0_status_i       (cp0_status),
+        // .cp0_cause_i        (cp0_cause),
+        // .cp0_epc_i          (cp0_epc),
+        // .cp0_count_i        (cp0_count),
+        // .cp0_config0_i      (cp0_config),
+
+        .mem_cp0_write_en   (mem_cp0_write_en),
+        .mem_cp0_write_addr (mem_cp0_addr),
+        .mem_cp0_write_data (mem_cp0_write_data),
+        .wb_cp0_write_en    (memwb_cp0_write_en),
+        .wb_cp0_write_addr  (memwb_cp0_addr),
+        .wb_cp0_write_data  (memwb_cp0_write_data),
+
+        .cp0_read_data_o    (idex_cp0_read_data)
+        // .cp0_status_o       (exmem_cp0_status),
+        // .cp0_cause_o        (exmem_cp0_cause),
+        // .cp0_epc_o          (exmem_cp0_epc),
+        // .cp0_count_o        (           ),
+        // .cp0_config0_o      (cp0_config0)
+    );
+
 
 
     // pipeline control

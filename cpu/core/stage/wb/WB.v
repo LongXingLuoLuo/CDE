@@ -18,6 +18,10 @@ module WB(
   input                       hilo_write_en_in,
   input       [`DATA_BUS]     hi_in,
   input       [`DATA_BUS]     lo_in,
+  //* cp0 in
+  input                       cp0_write_en_in,
+  input       [`DATA_BUS]     cp0_write_data_in,
+  input       [`CP0_ADDR_BUS] cp0_addr_in,
   // regfile control
   output  reg [`DATA_BUS]     result_out,
   output                      reg_write_en_out,
@@ -26,6 +30,10 @@ module WB(
   output                      hilo_write_en_out,
   output      [`DATA_BUS]     hi_out,
   output      [`DATA_BUS]     lo_out,
+  //* cp0 control
+  output                      cp0_write_en_out,
+  output      [`DATA_BUS]     cp0_write_data_out,
+  output      [`CP0_ADDR_BUS] cp0_addr_out,
   // debug signals
   output                      debug_reg_write_en,
   output      [`ADDR_BUS]     debug_pc_addr_out
@@ -40,6 +48,11 @@ module WB(
   assign hilo_write_en_out = hilo_write_en_in;
   assign hi_out = hi_in;
   assign lo_out = lo_in;
+
+  //* cp0
+  assign cp0_write_data_out = cp0_write_data_in;
+  assign cp0_addr_out = cp0_addr_in;
+  assign cp0_write_en_out = cp0_write_en_in;
 
   wire[`ADDR_BUS] address = result_in;
 

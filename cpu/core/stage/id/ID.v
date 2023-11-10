@@ -39,7 +39,19 @@ module ID (
     // to WB stage (write back to regfile)
     output                 reg_write_en,
     output [`REG_ADDR_BUS] reg_write_addr,
-    output [    `ADDR_BUS] current_pc_addr
+    output [    `ADDR_BUS] current_pc_addr,
+    // * to CP0 
+    output                  cp0_write_en,
+    output                  cp0_read_en,
+    output [`CP0_ADDR_BUS]  cp0_addr,
+    output [`DATA_BUS]      cp0_write_data
+    // // * exception signal
+    // output                  delayslot_flag_out,
+    // output                  next_inst_delayslot_flag,
+    // output [`EXC_TYPE_BUS]  exception_type,
+    // output                  eret_flag,
+    // output                  syscall_flag,
+    // output                  break_flag,
 );
 
     // extract information from instruction
@@ -111,5 +123,36 @@ module ID (
         .mem_sel          (mem_sel),
         .mem_write_data   (mem_write_data)
     );
+
+    CP0Gen  u_CP0Gen (
+        .inst             (inst),
+        .op               (inst_op),
+        .rs               (inst_rs),
+        .rd               (inst_rd),
+        .reg_data_1       (reg_data_1),
+        .cp0_write_en     (cp0_write_en),
+        .cp0_read_en      (cp0_read_en),
+        .cp0_write_data   (cp0_write_data),
+        .cp0_addr         (cp0_addr)
+    );
+
+    // wire invalid_inst_flag, overflow_flag;
+    // assign exception_type ={
+    // eret_flag, /* ADE */ 1'b0,
+    // syscall_flag, break_flag, /* TP */ 1'b0,
+    // overflow_flag, invalid_inst_flag, /* IF */ 1'b0};
+    
+    // ExceptionGen  u_ExceptionGen (
+    //     .inst                    (inst),
+    //     .rs                      (inst_rs),
+    //     .op                      (inst_op),
+    //     .rt                      (inst_rt),
+    //     .funct                   (inst_funct),
+    //     .eret_flag               (eret_flag),
+    //     .syscall_flag            (syscall_flag),
+    //     .break_flag              (break_flag),
+    //     .overflow_flag           (overflow_flag),
+    //     .invalid_inst_flag       (invalid_inst_flag)
+    // );
 
 endmodule  // ID
